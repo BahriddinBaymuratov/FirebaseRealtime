@@ -42,10 +42,8 @@ class UsersActivity : AppCompatActivity() {
                 userAdapter.notifyDataSetChanged()
             }
 
-            override fun onCancelled(error: DatabaseError) {
-
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
-
     }
+
 }

@@ -20,8 +20,7 @@ class UserAdapter(val list: List<User>) : RecyclerView.Adapter<UserAdapter.Vh>()
         return list.size
     }
 
-    inner class Vh(val item: ItemLayoutBinding) : RecyclerView.ViewHolder(item.root) {
-
+    inner class Vh(private val item: ItemLayoutBinding) : RecyclerView.ViewHolder(item.root) {
         fun bind(user: User) {
             item.apply {
                 Picasso.get()

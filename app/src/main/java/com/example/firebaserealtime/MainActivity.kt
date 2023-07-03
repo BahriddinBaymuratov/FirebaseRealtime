@@ -12,9 +12,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         firebaseDatabase = FirebaseDatabase.getInstance()
-        reference = firebaseDatabase.getReference("users")
+        reference = firebaseDatabase.getReference("userlar")
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.client_id))
@@ -47,6 +49,16 @@ class MainActivity : AppCompatActivity() {
         binding.signOutBtn.setOnClickListener {
             mGoogleSignInClient.signOut()
         }
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            val token = task.result
+            binding.edit.setText(token)
+            Log.d(TAG, "onCreate: $token")
+            Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -72,23 +84,9 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this,UsersActivity::class.java)
                     startActivity(intent)
                 }
-
         } catch (e: ApiException) {
             Log.d(TAG, "handleSingInResult: " + e.statusCode)
             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

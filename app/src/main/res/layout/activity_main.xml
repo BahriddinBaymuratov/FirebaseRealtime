@@ -8,6 +8,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit"/>
+
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn"
         android:layout_width="wrap_content"
